@@ -1,37 +1,35 @@
-import { apiFetchJSON, apiFetchBlob } from "./apiClient";
+import ApiClient from "./apiClient";
 
-// -------- PROFILE --------
+// profile
 export async function getPortfolioData() {
-  const data = await apiFetchJSON("/auth/public/profile");
+  const data = await ApiClient.requestJSON("/auth/public/profile");
   return data.message;
 }
 
-// -------- RESUME --------
+// resume
 export async function downloadResume() {
-  return apiFetchBlob("/resume/public/download");
+  return ApiClient.requestBlob("/resume/public/download");
 }
 
-// -------- CONTACT --------
+// contac
 export async function sendContactNotification(payload) {
-  const data = await apiFetchJSON("/auth/notification", {
+  return ApiClient.requestJSON("/auth/notification", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
   });
-
-  return data;
 }
 
-// -------- PROJECTS --------
+// projects
 export async function getAllProjects() {
-  const data = await apiFetchJSON("/project/all");
+  const data = await ApiClient.requestJSON("/project/all");
   return data.message;
 }
 
 export async function getProjectById(projectId) {
-  const data = await apiFetchJSON("/project/read", {
+  const data = await ApiClient.requestJSON("/project/read", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -42,9 +40,9 @@ export async function getProjectById(projectId) {
   return data.message;
 }
 
-// -------- BLOG --------
+// blog
 export async function getBlogById(blogId) {
-  const data = await apiFetchJSON("/blog/public/read", {
+  const data = await ApiClient.requestJSON("/blog/public/read", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
