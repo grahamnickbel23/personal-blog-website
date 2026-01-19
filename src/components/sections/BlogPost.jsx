@@ -1,0 +1,154 @@
+import { useEffect, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { ArrowLeft, Calendar } from 'lucide-react';
+import { getBlogById } from '../../api/getPortfolioData.js';
+
+const BlogPost = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    // const { portfolioData } = usePortfolio();
+
+    const [blog, setBlog] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const { scrollYProgress } = useScroll();
+    const pathLength = useSpring(scrollYProgress, { stiffness: 400, damping: 90 });
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+
+        const fetchBlog = async () => {
+            setLoading(true);
+            try {
+                const data = await getBlogById(id);
+                // Normalize date
+                const formattedBlog = {
+                    ...data,
+                    date: new Date(data.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
+                    content: data.content || data.main 
+                };
+                setBlog(formattedBlog);
+            } catch (error) {
+                console.error("Failed to fetch blog:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (id) {
+            fetchBlog();
+        }
+    }, [id]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-950 relative overflow-hidden">
+                {/* Background Decor */}
+                <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" />
+                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-700" />
+                </div>
+
+                <div className="relative z-10 flex flex-col items-center gap-6">
+                    <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        className="w-16 h-16 border-4 border-slate-800 border-t-emerald-500 rounded-full shadow-2xl shadow-emerald-500/20"
+                    />
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ repeat: Infinity, duration: 1.5, repeatType: "reverse" }}
+                        className="text-emerald-500 font-sans font-medium tracking-widest uppercase text-sm"
+                    >
+                        Loading Article
+                    </motion.div>
+                </div>
+            </div>
+        );
+    }
+
+    if (!blog) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-[#fff1e5] text-slate-900">
+                <div className="text-center">
+                    <h2 className="text-2xl font-serif mb-4">Post not found</h2>
+                    <button onClick={() => navigate('/blog')} className="text-emerald-900 hover:underline">
+                        Return to Blog
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="min-h-screen bg-[#fff1e5] text-[#1a1a1a] font-serif pt-32 pb-20 px-6 relative"
+        >
+            {/* Progress Indicator */}
+            <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden xl:flex flex-col items-center gap-2">
+                <svg className="w-12 h-12 -rotate-90" viewBox="0 0 100 100">
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        pathLength="1"
+                        className="stroke-slate-300 fill-none"
+                        strokeWidth="8"
+                    />
+                    <motion.circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        pathLength="1"
+                        className="stroke-emerald-600 fill-none"
+                        strokeWidth="8"
+                        style={{ pathLength }}
+                    />
+                </svg>
+                <span className="text-xs font-sans text-slate-500 font-medium tracking-wider">READ</span>
+            </div>
+
+            <div className="max-w-3xl mx-auto">
+                <Link to="/blog" className="inline-flex items-center text-slate-600 hover:text-slate-900 mb-12 transition-colors font-sans text-sm tracking-wide uppercase font-bold">
+                    <ArrowLeft size={16} className="mr-2" /> Back to Blog
+                </Link>
+
+                <article>
+                    <header className="mb-12 border-b border-slate-300 pb-12">
+                        <div className="flex items-center gap-4 text-slate-600 font-sans text-sm mb-6">
+                            <span className="bg-[#f2dfce] px-3 py-1 rounded-full font-medium text-xs tracking-wider uppercase text-slate-800">Interpretability</span>
+                            <span className="flex items-center gap-1 font-medium"><Calendar size={14} /> {blog.date}</span>
+                        </div>
+                        <h1 className="text-4xl md:text-6xl font-serif font-bold leading-tight mb-8 text-slate-900">
+                            {blog.title}
+                        </h1>
+                    </header>
+
+                    <div
+                        className="prose prose-lg prose-slate max-w-none 
+                        prose-headings:font-serif prose-headings:font-bold prose-headings:text-slate-900 
+                        prose-p:leading-relaxed prose-p:text-slate-800 prose-p:font-serif
+                        prose-a:text-emerald-800 hover:prose-a:text-emerald-900 prose-a:no-underline hover:prose-a:underline
+                        prose-strong:text-slate-900 prose-strong:font-bold
+                        prose-li:text-slate-800"
+                        dangerouslySetInnerHTML={{ __html: blog.content }}
+                    />
+                </article>
+
+                <div className="mt-20 pt-10 border-t border-slate-300">
+                    <div className="flex justify-between items-center">
+                        <div className="font-sans text-slate-600 text-sm font-medium">
+                            Share this post
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
+    );
+};
+
+export default BlogPost;
