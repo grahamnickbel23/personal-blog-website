@@ -5,17 +5,14 @@ import App from './App.jsx'
 
 import { PortfolioProvider } from './context/PortfolioContext.jsx'
 import { SpeedInsights } from "@vercel/speed-insights/react"
-import { Analytics } from '@vercel/analytics/next'
+import { Analytics } from "@vercel/analytics/react"
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <PortfolioProvider>
-      
       <App />
-
-      <Analytics/>
+      <Analytics />
       <SpeedInsights />
-
     </PortfolioProvider>
   </StrictMode>,
 )
