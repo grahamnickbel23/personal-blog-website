@@ -1,102 +1,56 @@
+import { apiFetchJSON, apiFetchBlob } from "./apiClient";
+
+// -------- PROFILE --------
 export async function getPortfolioData() {
-  const API_KEY = "032363d4bdf4188e4e5f62fb72e001632a9f8bb674685c6e2908af0936510814";
-  const BASE = "https://cyqmbtmb4c.execute-api.ap-south-1.amazonaws.com";
-
-  const res = await fetch(`${BASE}/auth/public/profile`, {
-    headers: { "x-api-key": API_KEY }
-  });
-
-  const data = await res.json();
+  const data = await apiFetchJSON("/auth/public/profile");
   return data.message;
 }
 
+// -------- RESUME --------
 export async function downloadResume() {
-  const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
-  const BASE = import.meta.env.VITE_API_BASE;
-
-  const res = await fetch(`${BASE}/resume/public/download`, {
-    headers: { "x-api-key": API_KEY }
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to download resume');
-  }
-
-  return res.blob();
+  return apiFetchBlob("/resume/public/download");
 }
 
-export async function sendContactNotification(data) {
-  const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
-  const BASE = import.meta.env.VITE_API_BASE;
-
-  const res = await fetch(`${BASE}/auth/notification`, {
-    method: 'POST',
+// -------- CONTACT --------
+export async function sendContactNotification(payload) {
+  const data = await apiFetchJSON("/auth/notification", {
+    method: "POST",
     headers: {
-      "x-api-key": API_KEY,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(payload),
   });
 
-  if (!res.ok) {
-    throw new Error('Failed to send message');
-  }
-
-  return res.json();
+  return data;
 }
 
+// -------- PROJECTS --------
 export async function getAllProjects() {
-  const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
-  const BASE = import.meta.env.VITE_API_BASE;
-
-  const res = await fetch(`${BASE}/project/all`, {
-    headers: { "x-api-key": API_KEY }
-  });
-
-  const data = await res.json();
+  const data = await apiFetchJSON("/project/all");
   return data.message;
 }
 
 export async function getProjectById(projectId) {
-  const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
-  const BASE = import.meta.env.VITE_API_BASE;
-
-  const res = await fetch(`${BASE}/project/read`, {
-    method: 'POST',
+  const data = await apiFetchJSON("/project/read", {
+    method: "POST",
     headers: {
-      "x-api-key": API_KEY,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ projectId })
+    body: JSON.stringify({ projectId }),
   });
-
-  const data = await res.json();
-
-  if (!res.ok || !data.success) {
-    throw new Error(data.message || 'Failed to fetch project');
-  }
 
   return data.message;
 }
 
+// -------- BLOG --------
 export async function getBlogById(blogId) {
-  const API_KEY = import.meta.env.VITE_PUBLIC_API_KEY;
-  const BASE = import.meta.env.VITE_API_BASE;
-
-  const res = await fetch(`${BASE}/blog/public/read`, {
-    method: 'POST',
+  const data = await apiFetchJSON("/blog/public/read", {
+    method: "POST",
     headers: {
-      "x-api-key": API_KEY,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ blogId })
+    body: JSON.stringify({ blogId }),
   });
-
-  const data = await res.json();
-
-  if (!res.ok || !data.success) {
-    throw new Error(data.message || 'Failed to fetch blog');
-  }
 
   return data.message;
 }

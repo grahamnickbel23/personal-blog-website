@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/api/(.*)",
+      "destination": "https://cyqmbtmb4c.execute-api.ap-south-1.amazonaws.com/$1"
     }
   ]
 }
