@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getProjectById } from '../api/getPortfolioData';
-import { ArrowLeft, Github, ExternalLink, Calendar, Zap, Layers, Cpu, X } from 'lucide-react';
+import { ArrowLeft, Github, ExternalLink, Calendar, Zap, Layers, Cpu, X, ArrowUp } from 'lucide-react';
 import { getProjectTheme } from '../utils/projectTheme.jsx';
 
 const ProjectDetails = () => {
@@ -14,6 +14,20 @@ const ProjectDetails = () => {
     const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState(null);
     const [isZoomed, setIsZoomed] = useState(false);
+    const [showScrollTop, setShowScrollTop] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowScrollTop(window.scrollY > 300);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -258,6 +272,22 @@ const ProjectDetails = () => {
                             </p>
                         )}
                     </motion.div>
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {showScrollTop && (
+                    <motion.button
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.5 }}
+                        onClick={scrollToTop}
+                        className="fixed bottom-8 right-8 z-40 p-3 bg-emerald-500 text-slate-950 rounded-full shadow-lg hover:bg-emerald-400 transition-colors"
+                        whileHover={{ y: -3 }}
+                        whileTap={{ scale: 0.9 }}
+                    >
+                        <ArrowUp size={24} />
+                    </motion.button>
                 )}
             </AnimatePresence>
         </div>

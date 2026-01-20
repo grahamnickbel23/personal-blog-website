@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
-import { ArrowLeft, Calendar, Share2 } from 'lucide-react';
+import { motion, useScroll, useSpring, useTransform, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Calendar, Share2, ArrowUp } from 'lucide-react';
 import { getBlogById } from '../../api/getPortfolioData.js';
 
 const BlogPost = () => {
@@ -13,6 +13,21 @@ const BlogPost = () => {
 
     const { scrollYProgress } = useScroll();
     const pathLength = useSpring(scrollYProgress, { stiffness: 400, damping: 90 });
+
+    const [showScrollTop, setShowScrollTop] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowScrollTop(window.scrollY > 300);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -28,6 +43,19 @@ const BlogPost = () => {
                     content: data.content || data.main
                 };
                 setBlog(formattedBlog);
+
+                // Restore scroll position securely
+                // LocalStorage is isolated by origin (Same-Origin Policy), so other sites cannot access this.
+                const savedPosition = localStorage.getItem(`blog_read_pos_${id}`);
+                if (savedPosition) {
+                    // Small delay to ensure content renders
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: parseInt(savedPosition),
+                            behavior: 'smooth'
+                        });
+                    }, 500);
+                }
             } catch (error) {
                 console.error("Failed to fetch blog:", error);
             } finally {
@@ -39,6 +67,25 @@ const BlogPost = () => {
             fetchBlog();
         }
     }, [id]);
+
+    // Save scroll position with debounce
+    useEffect(() => {
+        if (loading || !blog) return;
+
+        let timeoutId;
+        const handleScroll = () => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                localStorage.setItem(`blog_read_pos_${id}`, window.scrollY);
+            }, 1000); // Save 1 second after user stops scrolling
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            clearTimeout(timeoutId);
+        };
+    }, [loading, blog, id]);
 
     const handleShare = async () => {
         if (navigator.share) {
@@ -169,6 +216,22 @@ const BlogPost = () => {
                     </button>
                 </div>
             </div>
+
+            <AnimatePresence>
+                {showScrollTop && (
+                    <motion.button
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.5 }}
+                        onClick={scrollToTop}
+                        className="fixed bottom-8 right-8 z-40 p-3 bg-emerald-600 text-white rounded-full shadow-lg hover:bg-emerald-500 transition-colors"
+                        whileHover={{ y: -3 }}
+                        whileTap={{ scale: 0.9 }}
+                    >
+                        <ArrowUp size={24} />
+                    </motion.button>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 };
