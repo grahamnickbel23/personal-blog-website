@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getProjectById } from '../api/getPortfolioData';
 import { ArrowLeft, Github, ExternalLink, Calendar, Zap, Layers, Cpu, X, ArrowUp } from 'lucide-react';
 import { getProjectTheme } from '../utils/projectTheme.jsx';
+import ProjectSkeleton from '../components/ui/ProjectSkeleton';
 
 const ProjectDetails = () => {
     const { id } = useParams();
@@ -49,7 +50,7 @@ const ProjectDetails = () => {
         }
     }, [id]);
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center bg-slate-950 text-emerald-500">Loading...</div>;
+    if (loading) return <ProjectSkeleton />;
 
     const projectIndex = location.state?.index ?? (project ? (parseInt(id.slice(-4), 16) || 0) : 0);
     const theme = getProjectTheme(projectIndex);

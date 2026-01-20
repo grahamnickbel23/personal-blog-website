@@ -8,7 +8,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 const Navbar = () => {
     const location = useLocation();
     const isHome = location.pathname === '/';
-    // Check if we are on a single blog post page (starts with /blog/ but is not just /blog)
+    
     const isBlogDetails = location.pathname.startsWith('/blog/') && location.pathname !== '/blog';
 
     const { portfolioData, loading } = usePortfolio();
@@ -24,10 +24,10 @@ const Navbar = () => {
                 // Only apply logic for mobile devices (standard breakpoint < 768px)
                 if (window.innerWidth < 768) {
                     if (window.scrollY > lastScrollY && window.scrollY > 50) {
-                        // Scrolling down & past top buffer -> hide
+                        // Scrolling down & past top buffer
                         setIsVisible(false);
                     } else {
-                        // Scrolling up or at top -> show
+                        // Scrolling up or at top
                         setIsVisible(true);
                     }
                 } else {
