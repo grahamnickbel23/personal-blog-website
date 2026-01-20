@@ -7,7 +7,6 @@ import { getBlogById } from '../../api/getPortfolioData.js';
 const BlogPost = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    // const { portfolioData } = usePortfolio();
 
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);

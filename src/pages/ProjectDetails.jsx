@@ -25,7 +25,6 @@ const ProjectDetails = () => {
                 setProject(data);
             } catch (error) {
                 console.error("Failed to fetch project details:", error);
-                // Optionally handle error, e.g. navigate to error page or show message
             } finally {
                 setLoading(false);
             }
@@ -38,7 +37,6 @@ const ProjectDetails = () => {
 
     if (loading) return <div className="min-h-screen flex items-center justify-center bg-slate-950 text-emerald-500">Loading...</div>;
 
-    // Use index from state if available (preserves list theme), otherwise fallback to hash
     const projectIndex = location.state?.index ?? (project ? (parseInt(id.slice(-4), 16) || 0) : 0);
     const theme = getProjectTheme(projectIndex);
 
@@ -89,13 +87,13 @@ const ProjectDetails = () => {
                         ))}
                     </div>
 
-                    <div className="flex flex-nowrap gap-3 md:gap-4 w-full">
+                    <div className="flex flex-nowrap gap-3 md:gap-4 w-full md:w-auto">
                         {project.link && (
                             <a
                                 href={project.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 md:px-6 md:py-3 text-sm md:text-base rounded-lg font-bold ${theme.button} transition-colors whitespace-nowrap`}
+                                className={`flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-4 py-3 md:px-6 md:py-3 text-sm md:text-base rounded-lg font-bold ${theme.button} transition-colors whitespace-nowrap`}
                             >
                                 View Live <ExternalLink size={18} />
                             </a>
@@ -105,7 +103,7 @@ const ProjectDetails = () => {
                                 href={project.github}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 md:px-6 md:py-3 text-sm md:text-base rounded-lg font-bold text-slate-300 border border-slate-700 hover:bg-slate-800 transition-colors whitespace-nowrap"
+                                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-4 py-3 md:px-6 md:py-3 text-sm md:text-base rounded-lg font-bold text-slate-300 border border-slate-700 hover:bg-slate-800 transition-colors whitespace-nowrap"
                             >
                                 Source Code <Github size={18} />
                             </a>

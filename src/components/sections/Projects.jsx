@@ -20,11 +20,11 @@ const Projects = () => {
 
                 <div className="space-y-32">
                     {(() => {
-                        // User requested to show only IDs 0 and 1 on home page
+                        // show only IDs 0 and 1 on home page
                         const projectsToShow = portfolioData.projects.slice(0, 2);
 
                         return projectsToShow.map((project, idx) => {
-                            // Global index matches the slice index since we start from 0
+                            // Global index matching
                             return (
                                 <ProjectCard
                                     key={idx}
