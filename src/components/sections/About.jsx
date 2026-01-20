@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { usePortfolio } from '../../context/PortfolioContext';
 
 import { FileDown, Loader } from 'lucide-react';
@@ -9,6 +9,9 @@ import { downloadResume } from '../../api/getPortfolioData';
 const About = () => {
     const { portfolioData, loading } = usePortfolio();
     const [isDownloading, setIsDownloading] = useState(false);
+
+    const imgRef = useRef(null);
+    const isInView = useInView(imgRef, { margin: "-40% 0px -40% 0px" });
 
     if (loading) return null; // Or a loading spinner
 
@@ -58,8 +61,8 @@ const About = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             className={`group flex items-center gap-3 px-8 py-4 bg-slate-900/50 border border-emerald-500/30 text-emerald-400 font-bold rounded-xl transition-all backdrop-blur-sm ${isDownloading
-                                    ? 'opacity-70 cursor-wait'
-                                    : 'hover:bg-slate-800 hover:border-emerald-500'
+                                ? 'opacity-70 cursor-wait'
+                                : 'hover:bg-slate-800 hover:border-emerald-500'
                                 }`}
                             onClick={handleDownload}
                             disabled={isDownloading}
@@ -90,11 +93,17 @@ const About = () => {
                         <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-purple-500/20 rounded-3xl blur-2xl -z-10 transform rotate-3 scale-105"></div>
 
                         <div className="relative aspect-square rounded-3xl overflow-hidden border-2 border-slate-800 bg-slate-900/50 backdrop-blur-sm group">
-                            <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
+                            <div className={`absolute inset-0 transition-colors duration-500 z-10 
+                                ${isInView ? 'bg-transparent' : 'bg-slate-950/20'} 
+                                md:bg-slate-950/20 md:group-hover:bg-transparent`}>
+                            </div>
                             <img
+                                ref={imgRef}
                                 src={portfolioData.about.image}
                                 alt={portfolioData.name}
-                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110"
+                                className={`w-full h-full object-cover transition-all duration-700 scale-100 group-hover:scale-110
+                                    ${isInView ? 'grayscale-0' : 'grayscale'}
+                                    md:grayscale md:group-hover:grayscale-0`}
                             />
 
                             {/* Corner Accents */}

@@ -8,16 +8,50 @@ import { usePortfolio } from '../context/PortfolioContext';
 const Navbar = () => {
     const location = useLocation();
     const isHome = location.pathname === '/';
+    // Check if we are on a single blog post page (starts with /blog/ but is not just /blog)
+    const isBlogDetails = location.pathname.startsWith('/blog/') && location.pathname !== '/blog';
+
     const { portfolioData, loading } = usePortfolio();
 
-    if (loading) return null;
+    if (loading || isBlogDetails) return null;
+
+    const [isVisible, setIsVisible] = React.useState(true);
+    const [lastScrollY, setLastScrollY] = React.useState(0);
+
+    React.useEffect(() => {
+        const controlNavbar = () => {
+            if (typeof window !== 'undefined') {
+                // Only apply logic for mobile devices (standard breakpoint < 768px)
+                if (window.innerWidth < 768) {
+                    if (window.scrollY > lastScrollY && window.scrollY > 50) {
+                        // Scrolling down & past top buffer -> hide
+                        setIsVisible(false);
+                    } else {
+                        // Scrolling up or at top -> show
+                        setIsVisible(true);
+                    }
+                } else {
+                    // Always visible on desktop
+                    setIsVisible(true);
+                }
+                setLastScrollY(window.scrollY);
+            }
+        };
+
+        window.addEventListener('scroll', controlNavbar);
+        return () => {
+            window.removeEventListener('scroll', controlNavbar);
+        };
+    }, [lastScrollY]);
+
+
 
 
     return (
         <motion.nav
             initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            transition={{ delay: 0.5, type: "spring" }}
+            animate={{ y: isVisible ? 0 : -100 }}
+            transition={{ duration: 0.3 }}
             className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4"
         >
             <div className="bg-slate-900/80 backdrop-blur-md border border-slate-700/50 rounded-full px-6 py-3 flex items-center gap-6 shadow-lg shadow-emerald-900/10">

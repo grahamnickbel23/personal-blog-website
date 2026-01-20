@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import BackgroundGrid from './components/ui/BackgroundGrid';
@@ -24,7 +23,6 @@ function AppContent() {
   const location = useLocation();
   const { loading, error, retry } = usePortfolio();
 
-  // Only show scroll progress on home page or long pages
   const showProgressBar = true;
 
   if (loading) return <LoadingScreen />;

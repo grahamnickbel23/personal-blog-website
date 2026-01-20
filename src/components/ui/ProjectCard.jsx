@@ -23,7 +23,7 @@ const ProjectCard = ({ project, index, id }) => {
                 {/* Decorative Background Blob */}
                 <div className={`absolute -top-20 -right-20 w-64 h-64 ${theme.blobColor} rounded-full blur-3xl pointer-events-none`} />
 
-                <div className="p-8 md:p-12 grid md:grid-cols-2 gap-8 items-center">
+                <div className="p-5 md:p-12 grid md:grid-cols-2 gap-6 md:gap-8 items-center">
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
                             <span className={`text-xs font-bold px-3 py-1 rounded-full ${theme.badge}`}>
@@ -32,7 +32,7 @@ const ProjectCard = ({ project, index, id }) => {
                             <span className="text-slate-500 text-xs font-mono">{project.period}</span>
                         </div>
 
-                        <h3 className="text-3xl md:text-4xl font-black text-slate-100 uppercase tracking-tighter">
+                        <h3 className="text-2xl md:text-4xl font-black text-slate-100 uppercase tracking-tighter">
                             {project.title}
                         </h3>
 
@@ -52,14 +52,14 @@ const ProjectCard = ({ project, index, id }) => {
                             <p className={`${theme.textAccent} font-bold text-sm mb-4 flex items-center gap-2`}>
                                 <Zap size={16} /> {project.stats}
                             </p>
-                            <div className="flex flex-wrap gap-4">
+                            <div className="flex flex-nowrap gap-3 md:gap-4 w-full">
                                 <motion.a
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     href={project.link}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold ${theme.button} transition-colors`}
+                                    className={`flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 md:px-6 md:py-3 text-sm md:text-base rounded-lg font-bold ${theme.button} transition-colors whitespace-nowrap`}
                                     onClick={(e) => e.stopPropagation()}
                                 >
                                     View Project <ExternalLink size={18} />
@@ -71,7 +71,7 @@ const ProjectCard = ({ project, index, id }) => {
                                         href={project.github}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-slate-300 border border-slate-700 hover:bg-slate-800 transition-colors"
+                                        className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 md:px-6 md:py-3 text-sm md:text-base rounded-lg font-bold text-slate-300 border border-slate-700 hover:bg-slate-800 transition-colors whitespace-nowrap"
                                         onClick={(e) => e.stopPropagation()}
                                     >
                                         Source Code <Github size={18} />

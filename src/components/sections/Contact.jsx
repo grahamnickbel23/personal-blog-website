@@ -61,9 +61,9 @@ const Contact = () => {
     return (
         <section className="pb-20 px-4">
             <div className="max-w-2xl mx-auto text-center">
-                <h2 className="text-5xl font-black text-white mb-8">READY TO <span className="text-emerald-500">COLLABORATE?</span></h2>
+                <h2 className="text-3xl md:text-5xl font-black text-white mb-8">READY TO <span className="text-emerald-500">COLLABORATE</span></h2>
 
-                <div className="bg-slate-900/50 backdrop-blur-md border border-slate-800 rounded-2xl p-8 shadow-2xl shadow-emerald-900/20">
+                <div className="bg-slate-900/50 backdrop-blur-md border border-slate-800 rounded-2xl p-4 md:p-8 shadow-2xl shadow-emerald-900/20">
                     <form onSubmit={handleSubmit} className="space-y-4 text-left">
                         <div>
                             <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Identification</label>

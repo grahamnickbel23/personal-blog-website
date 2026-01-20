@@ -33,7 +33,7 @@ const GitHubStats = () => {
             rel="noopener noreferrer"
             className="inline-block px-4 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-mono font-bold tracking-widest uppercase mb-4 hover:bg-emerald-500/20 transition-colors cursor-pointer"
         >
-            REPOS: {stats.repos} · COMMITS: {stats.commits > 1000 ? (stats.commits / 1000).toFixed(1) + 'k' : stats.commits} · LAST PUSH: {stats.lastPush}
+            REPOS: {stats.repos} <span className="hidden md:inline">· COMMITS: {stats.commits > 1000 ? (stats.commits / 1000).toFixed(1) + 'k' : stats.commits}</span> · LAST PUSH: {stats.lastPush}
         </a>
     );
 };

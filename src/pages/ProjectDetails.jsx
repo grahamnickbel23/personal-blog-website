@@ -52,7 +52,7 @@ const ProjectDetails = () => {
     }
 
     return (
-        <div className="min-h-screen pt-32 pb-20 px-4 md:px-8 max-w-5xl mx-auto bg-slate-950">
+        <div className="min-h-screen pt-32 pb-20 px-6 md:px-8 max-w-5xl mx-auto bg-slate-950">
             <Link to="/projects" className="inline-flex items-center gap-2 text-slate-400 hover:text-emerald-400 transition-colors mb-8 group">
                 <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                 Back to Projects
@@ -89,13 +89,13 @@ const ProjectDetails = () => {
                         ))}
                     </div>
 
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-nowrap gap-3 md:gap-4 w-full">
                         {project.link && (
                             <a
                                 href={project.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold ${theme.button} transition-colors`}
+                                className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 md:px-6 md:py-3 text-sm md:text-base rounded-lg font-bold ${theme.button} transition-colors whitespace-nowrap`}
                             >
                                 View Live <ExternalLink size={18} />
                             </a>
@@ -105,7 +105,7 @@ const ProjectDetails = () => {
                                 href={project.github}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-slate-300 border border-slate-700 hover:bg-slate-800 transition-colors"
+                                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 md:px-6 md:py-3 text-sm md:text-base rounded-lg font-bold text-slate-300 border border-slate-700 hover:bg-slate-800 transition-colors whitespace-nowrap"
                             >
                                 Source Code <Github size={18} />
                             </a>
@@ -114,7 +114,7 @@ const ProjectDetails = () => {
                 </div>
 
                 {/* Main Content */}
-                <div className="grid md:grid-cols-3 gap-12">
+                <div className="flex flex-col-reverse gap-8 md:grid md:grid-cols-3 md:gap-12">
                     <div className="md:col-span-2 space-y-8">
                         <div className="prose prose-invert prose-lg max-w-none">
                             <h3 className={`text-2xl font-bold ${theme.textAccent} mb-4`}>Overview</h3>
@@ -122,12 +122,12 @@ const ProjectDetails = () => {
                                 {project.description}
                             </p>
 
-                            <div className="mt-8 p-6 bg-slate-900/50 border border-slate-800 rounded-xl">
-                                <h4 className="text-lg font-bold text-white mb-2">Key Features</h4>
+                            <div className="mt-8 p-4 md:p-6 bg-slate-900/50 border border-slate-800 rounded-xl">
+                                <h4 className="text-lg font-bold text-white mb-3 md:mb-2">Key Features</h4>
                                 {project.highlights && project.highlights.length > 0 && (
-                                    <ul className="list-disc list-inside text-slate-400 space-y-2">
+                                    <ul className="list-disc list-outside ml-4 md:ml-0 md:list-inside text-slate-300 md:text-slate-400 space-y-2 md:space-y-2 text-sm md:text-base leading-snug md:leading-normal">
                                         {project.highlights.map((highlight, index) => (
-                                            <li key={index}>{highlight}</li>
+                                            <li key={index} className="pl-1 md:pl-0">{highlight}</li>
                                         ))}
                                     </ul>
                                 )}
@@ -201,7 +201,7 @@ const ProjectDetails = () => {
                         </div>
 
                         {/* Visual Decoration */}
-                        <div className="relative h-64 bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden flex items-center justify-center group">
+                        <div className="hidden md:flex relative h-64 bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden items-center justify-center group">
                             {project.image ? (
                                 <img
                                     src={project.image}

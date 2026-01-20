@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
-import { ArrowLeft, Calendar } from 'lucide-react';
+import { ArrowLeft, Calendar, Share2 } from 'lucide-react';
 import { getBlogById } from '../../api/getPortfolioData.js';
 
 const BlogPost = () => {
@@ -26,7 +26,7 @@ const BlogPost = () => {
                 const formattedBlog = {
                     ...data,
                     date: new Date(data.updatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
-                    content: data.content || data.main 
+                    content: data.content || data.main
                 };
                 setBlog(formattedBlog);
             } catch (error) {
@@ -40,6 +40,27 @@ const BlogPost = () => {
             fetchBlog();
         }
     }, [id]);
+
+    const handleShare = async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: blog.title,
+                    text: `Check out this article: ${blog.title}`,
+                    url: window.location.href,
+                });
+            } catch (error) {
+                console.log('Error sharing:', error);
+            }
+        } else {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
+            } catch (err) {
+                console.error('Failed to copy link: ', err);
+            }
+        }
+    };
 
     if (loading) {
         return (
@@ -139,12 +160,14 @@ const BlogPost = () => {
                     />
                 </article>
 
-                <div className="mt-20 pt-10 border-t border-slate-300">
-                    <div className="flex justify-between items-center">
-                        <div className="font-sans text-slate-600 text-sm font-medium">
-                            Share this post
-                        </div>
-                    </div>
+                <div className="mt-20 pt-10 border-t border-slate-300 md:hidden">
+                    <button
+                        onClick={handleShare}
+                        className="w-full bg-emerald-600 text-white font-sans font-bold py-4 rounded-xl flex items-center justify-center gap-3 active:scale-95 transition-transform shadow-lg shadow-emerald-500/20"
+                    >
+                        <Share2 size={20} />
+                        SHARE ARTICLE
+                    </button>
                 </div>
             </div>
         </motion.div>
