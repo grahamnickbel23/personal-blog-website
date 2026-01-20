@@ -1,14 +1,14 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { Github, Linkedin, Mail, Home } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { usePortfolio } from '../context/PortfolioContext';
 
 const Navbar = () => {
     const location = useLocation();
     const isHome = location.pathname === '/';
-    
+
     const isBlogDetails = location.pathname.startsWith('/blog/') && location.pathname !== '/blog';
 
     const { portfolioData, loading } = usePortfolio();
@@ -21,13 +21,11 @@ const Navbar = () => {
     React.useEffect(() => {
         const controlNavbar = () => {
             if (typeof window !== 'undefined') {
-                // Only apply logic for mobile devices (standard breakpoint < 768px)
+                // mobile devices
                 if (window.innerWidth < 768) {
                     if (window.scrollY > lastScrollY && window.scrollY > 50) {
-                        // Scrolling down & past top buffer
                         setIsVisible(false);
                     } else {
-                        // Scrolling up or at top
                         setIsVisible(true);
                     }
                 } else {
@@ -55,7 +53,7 @@ const Navbar = () => {
             className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4"
         >
             <div className="bg-slate-900/80 backdrop-blur-md border border-slate-700/50 rounded-full px-6 py-3 flex items-center gap-6 shadow-lg shadow-emerald-900/10">
-                <Link to="/" className="text-slate-200 font-bold tracking-tighter hover:text-emerald-400 transition-colors">DL.</Link>
+                <Link to="/" className="text-slate-200 hover:text-emerald-400 transition-colors"><Home size={20} /></Link>
                 <div className="h-4 w-[1px] bg-slate-700" />
                 <div className="flex gap-4">
                     <a href={portfolioData.contact.github} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white hover:scale-110 transition-all"><Github size={20} /></a>

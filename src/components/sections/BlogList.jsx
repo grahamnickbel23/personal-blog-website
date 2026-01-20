@@ -7,7 +7,6 @@ const BlogList = () => {
     const { portfolioData } = usePortfolio();
     const blogs = portfolioData?.blogs || [];
 
-    // Group blogs by date (Month, Year)
     const groupedBlogs = blogs.reduce((acc, blog) => {
         if (!acc[blog.date]) {
             acc[blog.date] = [];

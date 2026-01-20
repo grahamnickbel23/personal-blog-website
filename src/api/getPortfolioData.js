@@ -52,3 +52,8 @@ export async function getBlogById(blogId) {
 
   return data.message;
 }
+
+// system
+export async function getSystemHealth() {
+  return ApiClient.requestJSON("/api/system/status");
+}
