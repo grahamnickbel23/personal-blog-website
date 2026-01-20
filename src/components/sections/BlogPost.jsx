@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Calendar, Share2, ArrowUp } from 'lucide-react';
 import { getBlogById } from '../../api/getPortfolioData.js';
+import BlogSkeleton from '../ui/BlogSkeleton';
 
 const BlogPost = () => {
     const { id } = useParams();
@@ -109,31 +110,7 @@ const BlogPost = () => {
     };
 
     if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-950 relative overflow-hidden">
-                {/* Background Decor */}
-                <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" />
-                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-700" />
-                </div>
-
-                <div className="relative z-10 flex flex-col items-center gap-6">
-                    <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                        className="w-16 h-16 border-4 border-slate-800 border-t-emerald-500 rounded-full shadow-2xl shadow-emerald-500/20"
-                    />
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ repeat: Infinity, duration: 1.5, repeatType: "reverse" }}
-                        className="text-emerald-500 font-sans font-medium tracking-widest uppercase text-sm"
-                    >
-                        Loading Article
-                    </motion.div>
-                </div>
-            </div>
-        );
+        return <BlogSkeleton />;
     }
 
     if (!blog) {
