@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { sendContactNotification } from '../../api/getPortfolioData';
 import { Loader2 } from 'lucide-react';
+import TerminalOverlay from '../ui/TerminalOverlay';
 
 const Contact = () => {
     const [formData, setFormData] = React.useState({
@@ -10,6 +11,14 @@ const Contact = () => {
         transmission: ''
     });
     const [loading, setLoading] = React.useState(false);
+
+    // Terminal Overlay State
+    const [overlayState, setOverlayState] = useState({
+        isOpen: false,
+        type: 'success', // 'success' | 'error'
+        message: ''
+    });
+
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -17,6 +26,10 @@ const Contact = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
+    };
+
+    const closeOverlay = () => {
+        setOverlayState(prev => ({ ...prev, isOpen: false }));
     };
 
     const handleSubmit = (e) => {
@@ -41,7 +54,11 @@ const Contact = () => {
             sendContactNotification(apiPayload)
                 .then(response => {
                     console.log('Message sent successfully:', response);
-                    alert('Message sent successfully!');
+                    setOverlayState({
+                        isOpen: true,
+                        type: 'success',
+                        message: 'Uplink established. Message packet successfully delivered to operator terminal.'
+                    });
                     setFormData({
                         identification: '',
                         frequency: '',
@@ -50,7 +67,11 @@ const Contact = () => {
                 })
                 .catch(error => {
                     console.error('Error sending message:', error);
-                    alert('Failed to send message. Please try again.');
+                    setOverlayState({
+                        isOpen: true,
+                        type: 'error',
+                        message: 'Network handshake failed. Signal interference detected. Please retry transmission.'
+                    });
                 })
                 .finally(() => {
                     setLoading(false);
@@ -60,6 +81,14 @@ const Contact = () => {
 
     return (
         <section className="pb-20 px-4">
+            {/* Terminal Overlay */}
+            <TerminalOverlay
+                isOpen={overlayState.isOpen}
+                onClose={closeOverlay}
+                type={overlayState.type}
+                message={overlayState.message}
+            />
+
             <div className="max-w-2xl mx-auto text-center">
                 <h2 className="text-3xl md:text-5xl font-black text-white mb-8">READY TO <span className="text-emerald-500">COLLABORATE</span></h2>
 
